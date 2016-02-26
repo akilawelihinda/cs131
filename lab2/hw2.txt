@@ -1,0 +1,42 @@
+Our TA Joe prepared us really well for this homework, but the assignment
+was still very hard. Joe told us to make an "and_matcher" and a "or_matcher"
+, which is exactly what I did. Before Joe gave us this hint, I was
+considering make one monolitchic parser, which would not have been a very
+good idea. The "or_matcher" basically tries every possible expansion for
+a nonterminal symbol. This is needed because we need to somehow be able to
+support all possible uses of our grammar. The "and_matcher" tries to fully
+match a prefix of the current list of tokens with a list of symbols that
+is given to the "and_matcher". We need an "and_matcher" because otherwise
+there is no way of checking whether a given expansion of a nonterminal 
+symbol is correct or not.
+
+It took me a while to figure out that you could nest "match" statements
+together. This turned out to be very useful to make more complex logic.
+I also had a very hard time figuring out how and when to make a new
+acceptor. The "or_matcher" was relatively simple to implement, but I
+thought the "and_matcher" was much harder due to modifying the
+acceptor. The reason creating a new acceptor was difficult was
+because the acceptor was recursively generated, so it was not
+immediately obvious how build it. Finally, I realized that I could use
+the "and_matcher" to create a new acceptor. The reason we update the
+acceptor is because we want the parser to remember what we are currently
+trying to match using the "and_matcher".
+
+As usual, debugging Ocaml code took a long time as well. I 
+had to search Ocaml documentation on how to define two recursive 
+functions that call each other because I was getting compile errors. 
+
+While trying to generate test cases, I noticed some token inputs caused
+the parser to infinite loop. For example, the tokens "9+$4" caused my
+parser using awksub_grammar from HW#1  to go into an infinite loop. I noticed
+that the ordering of the grammar rules actually determines whether or not
+the parser goes into an infinite loop. This infinite loop is caused by a
+nonterminal symbol directly expanding into a combination of symbols including
+itself (i.e. "Expr->Expr Binop Expr"). The best way to prevent infinte loops
+in this parser is to put self-recursive rules at the very end of the grammar
+list. This reduces the possibility of a self-recursive rule infintely
+recursing on itself.
+
+So in short, my parser may sometimes may get stuck in an infinite loop
+when expanding a self-recursive rule. This parser is also limited in
+the sense that it can only produce leftmost derivations.

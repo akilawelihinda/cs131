@@ -1,0 +1,35 @@
+NO-OP KEN-KEN SOLVER:
+
+The no-op Ken-Ken solver will take the following as input:
+	1) board size
+	2) the original constraints (missing the operators)
+	3) the completed constraints (constraints containing
+		operators if a solution exists)
+	4) the completed grid if a solution exists
+
+Here is the declaration:
+	no_op_kenken(N, C, C_mod, T).
+
+If the call is sucessful, the user can expect C_mod to
+contain the completed constraints and T to contain a
+completed grid. If the call is unsuccessful, then the
+user can expect that no values will be bound to C_mod 
+and T.
+
+Example Call:
+	no_op_kenken(2, [ op(5, [1-1, 1-2, 2-1]) ], C_mod, T).
+Result:
+	C_mod bound to [ +(5, [1-1, 1-2, 2-1]) ]
+	T bound to [[1,2],[2,1]]
+
+Implementing a No-Op Ken-Ken Solver is just a little stretch
+from a normal Ken-Ken Solver. We just need to try all possible
+operators for each constraint. We can do this by adding an extra
+predicate which takes a constraint and tries all possible operators.
+For example:
+	try_all_constraints(Cons):-add_cons(Cons);sub_cons(Cons);
+		mult_cons(Cons);div_cons(Cons).
+
+This predicate will return true if at least one of the operators
+can fit in with the given constraint.
+

@@ -1,0 +1,30 @@
+The warmup functions were pretty simple implementations. I won't go in detail
+for each function. The warmup functions were a good way for me to get
+accustomed to the syntax and functional style of Ocaml.
+
+The filter_blind_alleys function was by far the most difficult and time
+consuming. The strategy I used was the one we went over in discussion.
+Given a list of rules, I first determined the purely terminal rules and
+added them to a terminal_rules list. I would then cycle through the rules
+ again, and if any non-terminal symbol had a right-hand-side composed of 
+all terminal symbols or terminal_rules members, then the non-terminal 
+symbol would be added to terminal_rules. I would repeat this process 
+until terminal_rules didn't change, which would indicate that we 
+have found all the terminal rules.
+
+After finding all the terminal rules, I wrote another function to remove any 
+rule which didn't contain only terminal rules on the right-hand-side. This 
+way, we are removing all "impossible" occurences from our grammar.
+
+Although I pass all the test cases, my code isn't optimized for efficiency.
+I also made a lot of functions, some of which are probably unncessary. The
+reason I made a lot of additional functions because it simplified my logic. I
+could not figure out the syntax to pass functions, so I made another function
+get_all_good_rules to calculate the computed_fixed_point for getting terminal
+rules.
+
+I had a huge problem getting my Ocaml script to run without syntax errors.
+Something that I noticed about Ocaml that irritates me is how function arg
+types are determined by the first call to the function. If you call the
+function incorrectly at the start, then all other later function calls to
+the same function won't work. 
